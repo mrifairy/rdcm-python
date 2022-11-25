@@ -43,7 +43,6 @@ def generate(DCM, options, SNR):
       options.conv_full   = 'true'
       options.h           = get_convolution_bm(options)
 
-
   # get the hemodynamic response function (HRF)
   h = options.h
 
@@ -56,11 +55,11 @@ def generate(DCM, options, SNR):
   # Convolving neuronal signal with HRF
   for i in range(nr):
       tmp = np.fft.ifft(np.fft.fft(x[:,i]) * np.fft.fft(np.vstack([ h, np.zeros(( N*3 - len(h), 1 )) ])))
-      y[:,i] = tmp[N:2*N];
+      y[:,i] = tmp[N:2*N]
   end
 
   # Sampling
-  y = y[0:r_dt:, :]
+  y = y[::r_dt, :]
 
   # Adding noise
   eps = np.random.randn(y.shape) * np.diag(np.std(y) / SNR)
